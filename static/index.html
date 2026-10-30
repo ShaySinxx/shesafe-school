@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#4A90D9">
+  <meta name="description" content="A safe space for students to get guidance on safety concerns.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SafeSpace">
+  <title>SafeSpace — Student Safety Support</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- ========== HEADER ========== -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4L6 12V20C6 29.6 12.2 38.4 20 40C27.8 38.4 34 29.6 34 20V12L20 4Z" fill="currentColor" opacity="0.15"/>
+          <path d="M20 6L8 13V20C8 28.4 13.6 36.2 20 37.8C26.4 36.2 32 28.4 32 20V13L20 6Z" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M20 16C18.4 16 17 17.2 17 19C17 20 17.5 20.8 18.2 21.3L17 26H23L21.8 21.3C22.5 20.8 23 20 23 19C23 17.2 21.6 16 20 16Z" fill="currentColor" opacity="0.7"/>
+        </svg>
+        <h1>SafeSpace</h1>
+      </div>
+      <p class="tagline">You deserve to feel safe. Let's figure this out together.</p>
+    </div>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="container">
+
+    <!-- INPUT SCREEN -->
+    <section id="screen-input" class="screen active">
+      <div class="card input-card">
+        <h2>What's going on?</h2>
+        <p class="hint">Describe what happened in your own words. Nothing you write here is saved.</p>
+        <form id="form-analyze" autocomplete="off">
+          <textarea
+            id="input-text"
+            rows="5"
+            maxlength="1000"
+            placeholder="e.g. Some classmates keep making fun of me in our class group chat..."
+            required
+            aria-label="Describe your concern"
+          ></textarea>
+          <div class="char-count"><span id="char-current">0</span>/1000</div>
+          <button type="submit" class="btn btn-primary" id="btn-submit">
+            <span class="btn-label">Get Guidance</span>
+            <span class="btn-loading" aria-hidden="true">
+              <span class="spinner"></span>
+              Thinking…
+            </span>
+          </button>
+        </form>
+      </div>
+
+      <div class="card info-card">
+        <h3>🚨 In immediate danger?</h3>
+        <p>If you or someone else is in danger <strong>right now</strong>, please call:</p>
+        <div class="quick-contacts">
+          <a href="tel:112" class="contact-chip emergency">📞 112 — Emergency</a>
+          <a href="tel:1098" class="contact-chip">📞 1098 — Childline</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOADING SCREEN -->
+    <section id="screen-loading" class="screen">
+      <div class="loading-container">
+        <div class="loading-pulse"></div>
+        <p>Finding the best guidance for you…</p>
+      </div>
+    </section>
+
+    <!-- RESULT SCREEN -->
+    <section id="screen-result" class="screen">
+      <!-- Emergency Banner -->
+      <div id="emergency-banner" class="banner-emergency" hidden>
+        <div class="banner-content">
+          <span class="banner-icon">🚨</span>
+          <div>
+            <strong>You are not alone.</strong>
+            <p>If you are in immediate danger, call <a href="tel:112">112</a> now.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="card result-card">
+        <div class="result-header">
+          <span id="result-category" class="category-badge"></span>
+          <span id="result-seriousness" class="seriousness-badge"></span>
+        </div>
+        <p id="result-summary" class="result-summary"></p>
+      </div>
+
+      <!-- Actions -->
+      <div class="card actions-card">
+        <h3>What you can do</h3>
+        <ol id="result-actions" class="actions-list"></ol>
+      </div>
+
+      <!-- Support Contacts -->
+      <div class="card support-card">
+        <h3>People who can help</h3>
+
+        <div class="support-section">
+          <h4>At school</h4>
+          <ul id="support-school" class="support-list"></ul>
+        </div>
+
+        <div class="support-section">
+          <h4>Official helplines & resources</h4>
+          <ul id="support-official" class="support-list"></ul>
+        </div>
+      </div>
+
+      <!-- Disclaimers -->
+      <div class="card disclaimers-card">
+        <details>
+          <summary>Important information</summary>
+          <ul id="result-disclaimers" class="disclaimers-list"></ul>
+        </details>
+      </div>
+
+      <!-- Mode indicator (small) -->
+      <div class="mode-indicator">
+        <span id="result-mode"></span>
+      </div>
+
+      <!-- Back Button -->
+      <button class="btn btn-secondary" id="btn-back">← Describe a different concern</button>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="app-footer">
+    <p>SafeSpace is a guidance tool, not an emergency service.</p>
+  </footer>
+
+  <!-- PWA Install Banner -->
+  <div id="install-banner" class="install-banner" hidden>
+    <p>Add SafeSpace to your home screen for quick access.</p>
+    <div class="install-actions">
+      <button id="btn-install" class="btn btn-small btn-primary">Install</button>
+      <button id="btn-dismiss-install" class="btn btn-small btn-ghost">Not now</button>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
